@@ -1,0 +1,35 @@
+read.csv("UniversalBank.csv")
+file.path("UniversalBank.csv")
+
+install.packages("rpart")
+library(rpart)
+install.packages("rpart.plot")
+library(rpart.plot)
+setwd(C:\Users\cheng\OneDrive\Desktop\Self-study\R)
+read.csv("UniversalBank.csv")
+
+bank.df <- read.csv("UniversalBank.csv")
+set.seed(11)
+
+train.index <- sample(1:nrow(bank.df), nrow(bank.df)*0.6)
+
+train.df <- bank.df[train.index,]
+valid.df <- bank.df[-train.index,]
+
+#install.packages("rpart")
+library(rpart)
+#install.packages("rpart.plot")
+library (rpart.plot)
+
+default.ct <- rpart(Personal.Loan ~ . , data=train.df, method="class")
+
+prp(default.ct, type = 1, extra = 1)
+full.ct <- default.ct <- rpart(Personal.Loan ~ . , data=train.df, method="class", control = rpart.control(cp = -1, minsplit = 1)   #if the CP is really large, it is penalizing the size of the tree
+
+default.ct.point.pred <- predict(default.ct, valid.df, type = "class")            
+library(caret)
+library(ggplot2)
+library(lattice)
+library(caret)
+
+confusionMatrix(default.ct.point.pred, factor(valid.df$Personal.Loan))
